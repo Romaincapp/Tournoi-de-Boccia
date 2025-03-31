@@ -4,7 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionnaire de Tournois de Boccia</title>
+    
+    <!-- Meta tags pour PWA -->
+    <meta name="description" content="Application de gestion complète pour organiser des tournois de Boccia">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Liens pour PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    
+    <!-- Styles externes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles internes -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -14,6 +29,17 @@
     </header>
 
     <div class="container">
+        <!-- Alerte de mise à jour -->
+        <div id="update-alert" class="alert alert-info hidden">
+            <p>Une nouvelle version de l'application est disponible !</p>
+            <button class="btn btn-primary" id="update-app-btn">Mettre à jour</button>
+        </div>
+        
+        <!-- Alerte connexion -->
+        <div id="connection-status" class="alert alert-warning hidden">
+            <p>Vous êtes actuellement hors ligne. Les modifications seront sauvegardées localement.</p>
+        </div>
+        
         <!-- Wizard de Configuration -->
         <div id="configuration-wizard" class="card">
             <h2>Assistant de Configuration du Tournoi</h2>
@@ -106,6 +132,7 @@
                     <button class="tab-button" data-tab="pools">Poules</button>
                     <button class="tab-button" data-tab="matches">Matchs</button>
                     <button class="tab-button" id="knockout-tab" data-tab="knockout">Phase Finale</button>
+                    <button class="tab-button" data-tab="ranking">Classement Général</button>
                     <button class="tab-button" data-tab="settings">Paramètres</button>
                 </div>
 
@@ -125,13 +152,27 @@
                             <p><strong>Équipes inscrites:</strong> <span id="dashboard-teams-count">0</span></p>
                             <p><strong>Poules:</strong> <span id="dashboard-pools-count">0</span></p>
                             <p><strong>Matchs joués:</strong> <span id="dashboard-matches-played">0</span> / <span id="dashboard-total-matches">0</span></p>
+                            <div class="progress-bar">
+                                <div id="progress-bar-fill" style="width: 0%"></div>
+                            </div>
                         </div>
                         <div id="quick-actions" class="card">
                             <h3>Actions Rapides</h3>
                             <button class="btn" data-action="manage-teams">Gérer les Équipes</button>
                             <button class="btn" data-action="view-matches">Voir les Matchs</button>
-                            <button class="btn" data-action="export-tournament">Exporter le Tournoi</button>
-                            <button class="btn" data-action="print-tournament">Imprimer les Feuilles de Match</button>
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle" id="export-dropdown-btn">
+                                    Exporter <i class="fas fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-menu hidden" id="export-dropdown">
+                                    <button class="dropdown-item" data-action="export-tournament">Exporter JSON</button>
+                                    <button class="dropdown-item" data-action="export-tournament-package">Export Complet (ZIP)</button>
+                                    <button class="dropdown-item" data-action="export-ranking-pdf">Classement (PDF)</button>
+                                    <button class="dropdown-item" data-action="export-matchsheets-pdf">Feuilles de Match (PDF)</button>
+                                    <button class="dropdown-item" data-action="export-bracket-pdf">Tableau Final (PDF)</button>
+                                </div>
+                            </div>
+                            <button class="btn" data-action="print-tournament">Imprimer</button>
                         </div>
                     </div>
 
@@ -160,6 +201,9 @@
                         </div>
                         <div class="card">
                             <h3>Équipes Inscrites</h3>
+                            <div class="form-group">
+                                <input type="text" id="team-search" placeholder="Rechercher une équipe...">
+                            </div>
                             <div id="teams-list" class="flex-container">
                                 <!-- Les équipes seront ajoutées ici dynamiquement -->
                             </div>
@@ -185,6 +229,17 @@
                     <!-- Gestion des Matchs -->
                     <div id="matches-tab" class="tab-pane">
                         <h2>Gestion des Matchs</h2>
+                        <div class="card">
+                            <div class="form-group">
+                                <label for="match-filter">Filtrer par</label>
+                                <select id="match-filter">
+                                    <option value="all">Tous les matchs</option>
+                                    <option value="pending">Matchs à jouer</option>
+                                    <option value="played">Matchs joués</option>
+                                    <option value="forfeit">Forfaits</option>
+                                </select>
+                            </div>
+                        </div>
                         <div id="matches-container">
                             <!-- Les matchs seront ajoutés ici dynamiquement -->
                         </div>
@@ -197,28 +252,26 @@
                     <!-- Phase Finale -->
                     <div id="knockout-tab" class="tab-pane">
                         <h2>Phase Finale</h2>
-                         <button class="tab-button" data-tab="ranking">Classement Général</button>
                         <div id="bracket-container" class="bracket">
                             <!-- Le tableau de la phase finale sera ajouté ici dynamiquement -->
                         </div>
                     </div>
-
-                    <!-- Ajouter un nouvel onglet pour le classement général -->
                     
-    <div id="ranking-tab" class="tab-pane">
-    <h2>Classement Général du Tournoi</h2>
-    <div class="card">
-        <h3>Classement complet</h3>
-        <div id="ranking-container">
-            <!-- Le classement sera généré ici dynamiquement -->
-        </div>
-    </div>
-    <div class="card">
-        <h3>Actions</h3>
-        <button class="btn" id="export-ranking-btn">Exporter le Classement</button>
-        <button class="btn" id="print-ranking-btn">Imprimer le Classement</button>
-    </div>
-</div>
+                    <!-- Classement Général -->
+                    <div id="ranking-tab" class="tab-pane">
+                        <h2>Classement Général du Tournoi</h2>
+                        <div class="card">
+                            <h3>Classement complet</h3>
+                            <div id="ranking-container">
+                                <!-- Le classement sera généré ici dynamiquement -->
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Actions</h3>
+                            <button class="btn" id="export-ranking-btn">Exporter le Classement</button>
+                            <button class="btn" id="print-ranking-btn">Imprimer le Classement</button>
+                        </div>
+                    </div>
 
                     <!-- Paramètres -->
                     <div id="settings-tab" class="tab-pane">
@@ -230,10 +283,6 @@
                             <button class="btn" id="import-btn">Importer un Tournoi</button>
                         </div>
                         <div class="card">
-                            <h3>Réinitialisation</h3>
-                            <button class="btn btn-danger" id="reset-btn">Réinitialiser le Tournoi</button>
-                        </div>
-                        <div class="card">
                             <h3>Personnalisation</h3>
                             <div class="form-group">
                                 <label for="theme-selector">Thème</label>
@@ -243,9 +292,58 @@
                                     <option value="high-contrast">Contraste élevé</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="font-size-selector">Taille du texte</label>
+                                <select id="font-size-selector">
+                                    <option value="small">Petite</option>
+                                    <option value="medium" selected>Moyenne</option>
+                                    <option value="large">Grande</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="auto-save-checkbox" checked>
+                                    Sauvegarde automatique
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Synchronisation</h3>
+                            <p>Configurez la synchronisation avec un compte pour sauvegarder et partager vos tournois.</p>
+                            <div id="sync-status">
+                                <p>Statut: <span id="sync-status-text">Non configuré</span></p>
+                            </div>
+                            <button class="btn" id="configure-sync-btn">Configurer la synchronisation</button>
+                        </div>
+                        <div class="card">
+                            <h3>À propos</h3>
+                            <p>Version: <span id="app-version">1.0.0</span></p>
+                            <p>Dernière mise à jour: <span id="last-update-date">31 mars 2025</span></p>
+                            <p><a href="#" id="changelog-link">Voir les notes de version</a></p>
+                        </div>
+                        <div class="card">
+                            <h3>Réinitialisation</h3>
+                            <button class="btn btn-danger" id="reset-btn">Réinitialiser le Tournoi</button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Titre de la modale</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Contenu dynamique de la modale -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-cancel-btn">Annuler</button>
+                <button class="btn btn-primary" id="modal-confirm-btn">Confirmer</button>
             </div>
         </div>
     </div>
@@ -260,6 +358,21 @@
         </div>
     </div>
 
+    <!-- Notification pour les installations PWA -->
+    <div id="pwa-install-prompt" class="pwa-prompt hidden">
+        <div class="pwa-prompt-content">
+            <div class="pwa-prompt-header">
+                <h3>Installer l'application</h3>
+                <button class="pwa-prompt-close">&times;</button>
+            </div>
+            <div class="pwa-prompt-body">
+                <p>Installez cette application sur votre appareil pour y accéder facilement, même hors ligne !</p>
+                <button class="btn btn-primary" id="pwa-install-btn">Installer</button>
+                <button class="btn" id="pwa-later-btn">Plus tard</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="js/data.js"></script>
     <script src="js/ui.js"></script>
@@ -267,8 +380,98 @@
     <script src="js/pools.js"></script>
     <script src="js/matches.js"></script>
     <script src="js/knockout.js"></script>
+    <script src="js/ranking.js"></script>
+    <script src="js/export.js"></script>
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/ranking.js"></script>
+    
+    <!-- Script PWA -->
+    <script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker enregistré avec succès:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('Erreur lors de l\'enregistrement du Service Worker:', error);
+                    });
+            });
+            
+            // Gestion des mises à jour
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', function() {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
+            });
+            
+            // Vérifier les mises à jour disponibles
+            navigator.serviceWorker.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+                    const updateAlert = document.getElementById('update-alert');
+                    updateAlert.classList.remove('hidden');
+                }
+            });
+            
+            // Appliquer la mise à jour
+            document.getElementById('update-app-btn').addEventListener('click', function() {
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ action: 'skipWaiting' });
+                }
+            });
+        }
+        
+        // Détecter l'état de la connexion
+        function updateConnectionStatus() {
+            const connectionStatus = document.getElementById('connection-status');
+            if (!navigator.onLine) {
+                connectionStatus.classList.remove('hidden');
+            } else {
+                connectionStatus.classList.add('hidden');
+            }
+        }
+        
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        document.addEventListener('DOMContentLoaded', updateConnectionStatus);
+        
+        // Installation de l'application (PWA)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Afficher notre notification d'installation personnalisée
+            const pwaPrompt = document.getElementById('pwa-install-prompt');
+            pwaPrompt.classList.remove('hidden');
+            
+            // Gérer le bouton d'installation
+            document.getElementById('pwa-install-btn').addEventListener('click', () => {
+                pwaPrompt.classList.add('hidden');
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('Utilisateur a accepté l\'installation');
+                    } else {
+                        console.log('Utilisateur a refusé l\'installation');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+            
+            // Gérer le bouton "Plus tard"
+            document.getElementById('pwa-later-btn').addEventListener('click', () => {
+                pwaPrompt.classList.add('hidden');
+            });
+            
+            // Gérer le bouton de fermeture
+            document.querySelector('.pwa-prompt-close').addEventListener('click', () => {
+                pwaPrompt.classList.add('hidden');
+            });
+        });
+    </script>
 </body>
 </html>
