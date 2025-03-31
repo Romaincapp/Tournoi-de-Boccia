@@ -72,4 +72,15 @@ function addExtraFeatures() {
         const tournament = TournamentData.getTournament();
         if (tournament.teams.length > 0 || tournament.matches.length > 0 || tournament.knockout.matches.length > 0) {
             event.preventDefault();
-            //
+            // Message standard de confirmation de navigation
+            event.returnValue = 'Vous avez des modifications non sauvegardées. Êtes-vous sûr de vouloir quitter ?';
+            return event.returnValue;
+        }
+    });
+    
+    // Ajout d'une fonctionnalité de sauvegarde automatique
+    setInterval(function() {
+        TournamentData.saveToLocalStorage();
+        console.log('Sauvegarde automatique effectuée');
+    }, 60000); // Sauvegarde toutes les minutes
+}
