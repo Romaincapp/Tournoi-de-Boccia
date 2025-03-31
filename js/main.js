@@ -84,3 +84,17 @@ function addExtraFeatures() {
         console.log('Sauvegarde automatique effectuée');
     }, 60000); // Sauvegarde toutes les minutes
 }
+// Initialiser le module de classement
+RankingManager.initEventListeners();
+
+// Dans la partie initEventListeners de UI :
+document.getElementById('export-ranking-btn')?.addEventListener('click', function() {
+    UI.exportRanking();
+});
+
+document.getElementById('print-ranking-btn')?.addEventListener('click', function() {
+    UI.printRanking();
+});
+
+// Quand on charge un tournoi existant :
+RankingManager.renderOverallRanking();
