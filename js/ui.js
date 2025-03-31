@@ -312,3 +312,144 @@ const UI = (function() {
         printTournament
     };
 })();
+
+/**
+ * Exporte le classement général au format CSV
+ */
+function exportRanking() {
+    const tournament = TournamentData.getTournament();
+    const ranking = RankingManager.calculateOverallRanking();
+    
+    if (ranking.length === 0) {
+        UI.showAlert('Aucune donnée à exporter', 'warning');
+        return;
+    }
+    
+    // Créer le contenu CSV
+    let csvContent = 'Rang,Équipe,Statut,Points,Différence\n';
+    
+    ranking.forEach(team => {
+        csvContent += `${team.rank},"${team.name}","${team.status || 'N/A'}",${team.points || 'N/A'},${team.pointsDiff || 'N/A'}\n`;
+    });
+    
+    // Créer et télécharger le fichier
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const exportFileName = tournament.info.name ?
+        `classement_${tournament.info.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv` :
+        `classement_tournoi_boccia_${new Date().toISOString().split('T')[0]}.csv`;
+    
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', exportFileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    UI.showAlert('Classement exporté avec succès');
+}
+
+/**
+ * Imprime le classement général
+ */
+function printRanking() {
+    const tournament = TournamentData.getTournament();
+    const ranking = RankingManager.calculateOverallRanking();
+    
+    if (ranking.length === 0) {
+        UI.showAlert('Aucune donnée à imprimer', 'warning');
+        return;
+    }
+    
+    // Créer une nouvelle fenêtre pour l'impression
+    const printWindow = window.open('', '_blank');
+    
+    if (!printWindow) {
+        UI.showAlert('Veuillez autoriser les fenêtres popup pour cette fonctionnalité', 'warning');
+        return;
+    }
+    
+    // Générer le contenu HTML à imprimer
+    let printContent = `
+        <html>
+        <head>
+            <title>Classement - ${tournament.info.name}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h1, h2, h3 { margin-bottom: 15px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .header { display: flex; justify-content: space-between; align-items: center; }
+                .tournament-info { margin-bottom: 20px; }
+                @media print {
+                    body { margin: 0; }
+                    @page { margin: 1cm; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>Classement Général</h1>
+                <div class="tournament-info">
+                    <h2>${tournament.info.name}</h2>
+                    <p><strong>Date:</strong> ${new Date(tournament.info.date).toLocaleDateString()}</p>
+                    <p><strong>Lieu:</strong> ${tournament.info.location}</p>
+                </div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Équipe</th>
+                        <th>Statut</th>
+                        <th>Points</th>
+                        <th>Différence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${ranking.map(team => `
+                        <tr>
+                            <td>${team.rank}</td>
+                            <td>${team.name}</td>
+                            <td>${team.status || 'N/A'}</td>
+                            <td>${team.points !== undefined ? team.points : 'N/A'}</td>
+                            <td>${team.pointsDiff !== undefined ? team.pointsDiff : 'N/A'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            
+            <p><small>Classement généré le ${new Date().toLocaleString()}</small></p>
+        </body>
+        </html>
+    `;
+    
+    // Écrire le contenu dans la nouvelle fenêtre et imprimer
+    printWindow.document.open();
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Attendre que le contenu soit chargé avant d'imprimer
+    printWindow.addEventListener('load', function() {
+        printWindow.print();
+    });
+}
+
+// Ajoutez ces fonctions au return de UI
+/*
+// API publique
+return {
+    showAlert,
+    showTab,
+    updateDashboard,
+    setTheme,
+    initEventListeners,
+    printTournament,
+    exportRanking,  // Ajouter ici
+    printRanking    // Ajouter ici
+};
+*/
