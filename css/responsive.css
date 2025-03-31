@@ -1,1 +1,71 @@
+/* Responsive Styles */
 
+/* Tablettes */
+@media (max-width: 992px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .team-card {
+        width: calc(50% - 15px);
+    }
+    
+    .tab-buttons {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+    
+    .tab-button {
+        flex: 0 0 auto;
+    }
+    
+    .bracket {
+        overflow-x: auto;
+    }
+}
+
+/* Téléphones en paysage et petites tablettes */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+    
+    h3 {
+        font-size: 18px;
+    }
+    
+    .team-card {
+        width: 100%;
+    }
+    
+    .flex-container {
+        flex-direction: column;
+    }
+    
+    .match-result {
+        flex-wrap: wrap;
+    }
+    
+    .match-team {
+        flex: 0 0 100%;
+        margin-bottom: 5px;
+    }
+    
+    .bracket {
+        flex-direction: column;
+    }
+    
+    .bracket-
