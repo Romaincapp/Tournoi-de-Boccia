@@ -397,4 +397,31 @@ const MatchesManager = (function() {
         const sortedTeams = KnockoutManager.sortTeamsForKnockout(qualifiedTeams);
         
         // Générer les matchs de la phase finale
-        KnockoutManager.generateKnockoutMatches(sortedTe
+        KnockoutManager.generateKnockoutMatches(sortedTeams.map(team => team.name));
+        
+        TournamentData.saveToLocalStorage();
+        UI.showTab('knockout');
+        UI.showAlert('Phase finale créée avec succès');
+    }
+
+    /**
+     * Initialise les écouteurs d'événements pour la gestion des matchs
+     */
+    function initEventListeners() {
+        // Finaliser les poules
+        document.getElementById('finalize-pools-btn').addEventListener('click', function() {
+            finalizePoolStage();
+        });
+    }
+
+    // API publique
+    return {
+        generateMatches,
+        renderMatches,
+        saveMatchResult,
+        editMatchResult,
+        setMatchForfeit,
+        finalizePoolStage,
+        initEventListeners
+    };
+})();
