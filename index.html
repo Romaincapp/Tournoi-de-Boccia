@@ -197,10 +197,28 @@
                     <!-- Phase Finale -->
                     <div id="knockout-tab" class="tab-pane">
                         <h2>Phase Finale</h2>
+                         <button class="tab-button" data-tab="ranking">Classement Général</button>
                         <div id="bracket-container" class="bracket">
                             <!-- Le tableau de la phase finale sera ajouté ici dynamiquement -->
                         </div>
                     </div>
+
+                    <!-- Ajouter un nouvel onglet pour le classement général -->
+                    
+    <div id="ranking-tab" class="tab-pane">
+    <h2>Classement Général du Tournoi</h2>
+    <div class="card">
+        <h3>Classement complet</h3>
+        <div id="ranking-container">
+            <!-- Le classement sera généré ici dynamiquement -->
+        </div>
+    </div>
+    <div class="card">
+        <h3>Actions</h3>
+        <button class="btn" id="export-ranking-btn">Exporter le Classement</button>
+        <button class="btn" id="print-ranking-btn">Imprimer le Classement</button>
+    </div>
+</div>
 
                     <!-- Paramètres -->
                     <div id="settings-tab" class="tab-pane">
@@ -251,5 +269,6 @@
     <script src="js/knockout.js"></script>
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/ranking.js"></script>
 </body>
 </html>
