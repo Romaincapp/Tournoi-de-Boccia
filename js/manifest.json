@@ -1,0 +1,58 @@
+{
+  "name": "Gestionnaire de Tournois de Boccia",
+  "short_name": "Boccia Manager",
+  "description": "Application de gestion complète pour les tournois de Boccia",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#3498db",
+  "theme_color": "#3498db",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["sports", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "screenshots/dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Dashboard du tournoi"
+    },
+    {
+      "src": "screenshots/brackets.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Tableau d'élimination directe"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nouveau tournoi",
+      "short_name": "Nouveau",
+      "description": "Créer un nouveau tournoi",
+      "url": "/index.html?action=new",
+      "icons": [{ "src": "icons/new-tournament.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Gestion des équipes",
+      "short_name": "Équipes",
+      "description": "Gérer les équipes du tournoi",
+      "url": "/index.html?tab=teams",
+      "icons": [{ "src": "icons/teams.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
