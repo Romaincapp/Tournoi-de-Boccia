@@ -600,13 +600,15 @@ if ('serviceWorker' in navigator) {
 
              });
 
-                function forceShowMainInterface() {
+               
+        });
+    </script>
+        <script>
+    function forceShowMainInterface() {
         document.getElementById('configuration-wizard').classList.add('hidden');
         document.getElementById('main-interface').classList.remove('hidden');
         console.log("Interface principale forcée à s'afficher");
-               }
-            });
-        });
-    </script>
+    }
+</script>
 </body>
 </html>
