@@ -457,3 +457,125 @@ tr:hover {
         margin: 1cm;
     }
 }
+/* Ajoutez ce code au fichier css/style.css */
+
+/* Styles pour la navigation améliorée des matchs */
+.matches-navigation {
+    margin-bottom: 20px;
+    background-color: var(--card-color);
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: var(--box-shadow);
+}
+
+.matches-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.match-filter-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+#clear-match-filters {
+    margin-left: auto;
+    display: block;
+}
+
+.matches-display-container {
+    margin-top: 15px;
+}
+
+.matches-pool-card {
+    margin-bottom: 25px;
+    animation: fadeIn 0.4s;
+}
+
+.matches-pool-card h3 {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.no-matches-message {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.highlighted-team {
+    position: relative;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.highlighted-team::before {
+    content: '➤';
+    position: absolute;
+    left: -20px;
+    color: var(--primary-color);
+}
+
+.match-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Pagination des matchs (à implémenter ultérieurement) */
+.match-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.match-pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.match-pagination button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-group {
+        min-width: 100%;
+    }
+    
+    .matches-filter-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
