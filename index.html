@@ -504,7 +504,8 @@
     <!-- Script PWA -->
     <script>
         // Enregistrement du Service Worker
-       if ('serviceWorker' in navigator) {
+       // Enregistrement du Service Worker
+if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('/Tournoi-de-Boccia/service-worker.js')
             .then(function(registration) {
@@ -514,6 +515,9 @@
                 console.log('Erreur lors de l\'enregistrement du Service Worker:', error);
             });
     });
+    
+    // Code de gestion des mises à jour, etc.
+}
             
             // Gestion des mises à jour
             let refreshing = false;
