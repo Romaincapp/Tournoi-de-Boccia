@@ -107,21 +107,144 @@
                 <button class="btn" id="wizard-next-2">Suivant</button>
             </div>
 
-            <div id="wizard-step-3" class="hidden">
-                <h3>Étape 3 : Règles de Classement</h3>
-                <div class="alert alert-info">
-                    <p>Le classement sera effectué selon les critères suivants (par ordre de priorité) :</p>
-                    <ol>
-                        <li>Total des points (victoire: 3 points, défaite: 1 point, forfait: 0 point)</li>
-                        <li>Nombre de matchs gagnés</li>
-                        <li>Différence de points (pour - contre)</li>
-                        <li>Total des points marqués (points pour)</li>
-                    </ol>
-                </div>
-                <button class="btn" id="wizard-prev-3">Précédent</button>
-                <button class="btn" id="wizard-finish">Terminer la Configuration</button>
+           <!-- Étape 3: Paramètres avancés -->
+<div id="wizard-step-3" class="hidden">
+    <h3>Étape 3: Paramètres avancés</h3>
+    
+    <!-- Règles de score personnalisées -->
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="custom-scoring-toggle">
+            Utiliser des règles de score personnalisées
+        </label>
+    </div>
+    
+    <div id="custom-scoring-rules" class="hidden">
+        <div class="form-group-grid">
+            <div class="form-group">
+                <label for="points-win">Points pour victoire</label>
+                <input type="number" id="points-win" min="0" value="3">
+            </div>
+            <div class="form-group">
+                <label for="points-loss">Points pour défaite</label>
+                <input type="number" id="points-loss" min="0" value="1">
+            </div>
+            <div class="form-group">
+                <label for="points-draw">Points pour égalité</label>
+                <input type="number" id="points-draw" min="0" value="2">
+            </div>
+            <div class="form-group">
+                <label for="points-forfeit">Points pour forfait</label>
+                <input type="number" id="points-forfeit" min="0" value="0">
             </div>
         </div>
+    </div>
+    
+    <!-- Critères de départage -->
+    <div class="form-group">
+        <label>Ordre des critères de départage</label>
+        <div id="tiebreakers-container">
+            <div class="tiebreaker-item">
+                <input type="checkbox" id="tiebreaker-points" class="tiebreaker-option" value="points" checked>
+                <label for="tiebreaker-points">Points totaux</label>
+            </div>
+            <div class="tiebreaker-item">
+                <input type="checkbox" id="tiebreaker-wins" class="tiebreaker-option" value="wins" checked>
+                <label for="tiebreaker-wins">Nombre de victoires</label>
+            </div>
+            <div class="tiebreaker-item">
+                <input type="checkbox" id="tiebreaker-diff" class="tiebreaker-option" value="pointsDiff" checked>
+                <label for="tiebreaker-diff">Différence de points</label>
+            </div>
+            <div class="tiebreaker-item">
+                <input type="checkbox" id="tiebreaker-scored" class="tiebreaker-option" value="pointsFor" checked>
+                <label for="tiebreaker-scored">Points marqués</label>
+            </div>
+            <div class="tiebreaker-item">
+                <input type="checkbox" id="tiebreaker-headtohead" class="tiebreaker-option" value="headToHead">
+                <label for="tiebreaker-headtohead">Confrontation directe</label>
+            </div>
+        </div>
+        <p class="form-help">Cochez les critères dans l'ordre de priorité souhaité</p>
+    </div>
+    
+    <!-- Durées de match -->
+    <div class="form-group-grid">
+        <div class="form-group">
+            <label for="match-duration">Durée d'un match (minutes)</label>
+            <input type="number" id="match-duration" min="5" value="30">
+        </div>
+        <div class="form-group">
+            <label for="break-between-matches">Pause entre matchs (minutes)</label>
+            <input type="number" id="break-between-matches" min="0" value="5">
+        </div>
+    </div>
+    
+    <button class="btn" id="wizard-prev-3">Précédent</button>
+    <button class="btn" id="wizard-next-3">Suivant</button>
+</div>
+
+<!-- Étape 4: Planification et options d'urgence -->
+<div id="wizard-step-4" class="hidden">
+    <h3>Étape 4: Planification et options d'urgence</h3>
+    
+    <!-- Pauses planifiées -->
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="scheduled-breaks-toggle">
+            Configurer des pauses planifiées
+        </label>
+    </div>
+    
+    <div id="scheduled-breaks-config" class="hidden">
+        <div id="breaks-container">
+            <!-- Les pauses seront ajoutées ici dynamiquement -->
+        </div>
+        <button class="btn btn-sm" id="add-break-btn">
+            <i class="fas fa-plus"></i> Ajouter une pause
+        </button>
+    </div>
+    
+    <!-- Options d'urgence -->
+    <div class="emergency-settings">
+        <h4>Paramètres d'urgence</h4>
+        <p class="form-help">Ces options vous permettent de gérer des changements de dernière minute</p>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="emergency-mode-toggle" checked>
+                Activer les options d'urgence
+            </label>
+        </div>
+        
+        <div class="emergency-options">
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="allow-late-registration" checked>
+                    Permettre l'inscription tardive d'équipes
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="allow-pool-modification" checked>
+                    Permettre la modification des poules après création
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="allow-format-change">
+                    Permettre le changement de format en cours de tournoi
+                </label>
+                <p class="form-help">Attention: cette option peut nécessiter de reconfigurer les matchs</p>
+            </div>
+        </div>
+    </div>
+    
+    <button class="btn" id="wizard-prev-4">Précédent</button>
+    <button class="btn" id="wizard-finish">Terminer la Configuration</button>
+</div>
 
         <!-- Interface Principale -->
         <div id="main-interface" class="hidden">
