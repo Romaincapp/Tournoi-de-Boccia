@@ -210,30 +210,30 @@ let tournament = {
     }
 
     // API publique
-    return {
-        // Getters
-        getTournament: () => tournament,
-        getInfo: () => tournament.info,
-        getConfig: () => tournament.config,
-        getTeams: () => tournament.teams,
-        getPools: () => tournament.pools,
-        getMatches: () => tournament.matches,
-        getKnockout: () => tournament.knockout,
-        getSettings: () => tournament.settings,
-        
-        // Setters (les fonctions qui modifient les données)
-        updateInfo,
-        updateConfig,
-        updateSettings,
-        
-        // Gestion du stockage
-        saveToLocalStorage,
-        loadFromLocalStorage,
-        exportTournament,
-        importTournament,
-        resetTournament,
-        
-        // Utilitaires
-        isPowerOfTwo
-    };
+  return {
+    // Getters
+    getTournament: () => tournament,
+    getInfo: () => tournament.info,
+    getConfig: () => tournament.config,
+    getTeams: () => tournament.teams,
+    getPools: () => tournament.pools,
+    getMatches: () => tournament.matches,
+    getKnockout: () => tournament.knockout,
+    getSettings: () => tournament.settings,
+    
+    // Setters (les fonctions qui modifient les données)
+    updateInfo,
+    updateConfig,
+    updateSettings,
+    
+    // Gestion du stockage
+    saveToLocalStorage,
+    loadFromLocalStorage,
+    exportTournament,
+    importTournament,
+    resetTournament,
+    
+    // Utilitaires
+    isPowerOfTwo
+};
 })();
