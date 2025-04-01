@@ -579,3 +579,103 @@ tr:hover {
         gap: 10px;
     }
 }
+/* Ajoutez ces styles à votre fichier css/style.css */
+
+/* Styles pour l'assistant de configuration amélioré */
+.form-group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-help {
+    font-size: 0.85em;
+    color: #777;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.half-width {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tiebreaker-item {
+    margin-bottom: 8px;
+}
+
+.tiebreaker-item label {
+    display: inline;
+    margin-left: 5px;
+    font-weight: normal;
+}
+
+.scheduled-break-item {
+    background-color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.scheduled-break-item h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.emergency-settings {
+    background-color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    border: 1px solid var(--border-color);
+}
+
+.emergency-settings h4 {
+    margin-top: 0;
+    color: var(--secondary-color);
+}
+
+.emergency-options {
+    margin-left: 20px;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Ajout d'animations pour les transitions */
+#wizard-step-1, #wizard-step-2, #wizard-step-3, #wizard-step-4 {
+    transition: opacity 0.3s ease-in-out;
+}
+
+#wizard-step-1:not(.hidden), 
+#wizard-step-2:not(.hidden), 
+#wizard-step-3:not(.hidden), 
+#wizard-step-4:not(.hidden) {
+    animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Styles des options d'urgence */
+.emergency-settings label {
+    display: flex;
+    align-items: center;
+}
+
+.emergency-settings input[type="checkbox"] {
+    margin-right: 8px;
+}
