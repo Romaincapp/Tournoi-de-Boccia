@@ -1,3 +1,20 @@
+const ConfigManager = (function() {
+    // Ajoutez cette vérification au début
+    if (typeof TournamentData === 'undefined') {
+        console.error('TournamentData is not loaded');
+        return {
+            initWizard: function() {
+                console.error('Cannot initialize wizard - TournamentData not loaded');
+            },
+            initEventListeners: function() {
+                console.error('Cannot initialize event listeners - TournamentData not loaded');
+            },
+            resetTournament: function() {
+                console.error('Cannot reset tournament - TournamentData not loaded');
+            }
+        };
+    }
+
 /**
  * Gestion de la configuration du tournoi
  */
