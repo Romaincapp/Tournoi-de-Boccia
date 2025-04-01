@@ -597,6 +597,14 @@ if ('serviceWorker' in navigator) {
             // Gérer le bouton de fermeture
             document.querySelector('.pwa-prompt-close').addEventListener('click', () => {
                 pwaPrompt.classList.add('hidden');
+
+             });
+
+                function forceShowMainInterface() {
+        document.getElementById('configuration-wizard').classList.add('hidden');
+        document.getElementById('main-interface').classList.remove('hidden');
+        console.log("Interface principale forcée à s'afficher");
+               }
             });
         });
     </script>
