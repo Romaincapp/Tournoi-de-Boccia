@@ -1,34 +1,57 @@
-/**
- * Gestion des données du tournoi
- */
-const TournamentData = (function() {
-    // Structure de données principale
-    let tournament = {
-        info: {
-            name: '',
-            date: '',
-            location: '',
-            format: ''
+let tournament = {
+    info: {
+        name: '',
+        date: '',
+        location: '',
+        format: ''
+    },
+    config: {
+        numPools: 2,
+        teamsPerPool: 4,
+        matchesPerTeam: 3,
+        qualificationMode: 'top-n',
+        teamsQualifying: 2,
+        numKnockoutTeams: 8,
+        
+        // Paramètres avancés pour le scoring
+        scoringRules: {
+            win: 3,
+            loss: 1,
+            draw: 2,
+            forfeit: 0
         },
-        config: {
-            numPools: 2,
-            teamsPerPool: 4,
-            matchesPerTeam: 3,
-            qualificationMode: 'top-n',
-            teamsQualifying: 2,
-            numKnockoutTeams: 8
-        },
-        teams: [],
-        pools: [],
-        matches: [],
-        knockout: {
-            rounds: [],
-            matches: []
-        },
-        settings: {
-            theme: 'default'
+        useCustomScoring: false,
+        
+        // Critères de départage (ordre de priorité)
+        tiebreakers: ['points', 'wins', 'pointsDiff', 'pointsFor'],
+        
+        // Durées de match
+        matchDuration: 30,
+        breakBetweenMatches: 5,
+        
+        // Pauses planifiées
+        scheduledBreaks: [],
+        useScheduledBreaks: false,
+        
+        // Paramètres d'urgence
+        emergencySettings: {
+            enabled: true,
+            allowLateRegistration: true,
+            allowPoolModification: true,
+            allowFormatChange: false
         }
-    };
+    },
+    teams: [],
+    pools: [],
+    matches: [],
+    knockout: {
+        rounds: [],
+        matches: []
+    },
+    settings: {
+        theme: 'default'
+    }
+};
 
     /**
      * Enregistre les données du tournoi dans le localStorage
