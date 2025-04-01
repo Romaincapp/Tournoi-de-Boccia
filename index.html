@@ -27,6 +27,13 @@
     <header>
         <h1>Gestionnaire de Tournois de Boccia</h1>
     </header>
+    <!-- Ajouter juste après le body -->
+<div style="position: fixed; top: 10px; right: 10px; z-index: 9999;">
+    <button onclick="localStorage.removeItem('bocciaTournament'); location.reload();" 
+            style="padding: 5px; background: red; color: white; border: none; border-radius: 5px;">
+        Réinitialiser
+    </button>
+</div>
 
     <div class="container">
         <!-- Alerte de mise à jour -->
