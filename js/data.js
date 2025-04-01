@@ -1,59 +1,58 @@
 const TournamentData = (function() {
     let tournament = {
-        
-    info: {
-        name: '',
-        date: '',
-        location: '',
-        format: ''
-    },
-    config: {
-        numPools: 2,
-        teamsPerPool: 4,
-        matchesPerTeam: 3,
-        qualificationMode: 'top-n',
-        teamsQualifying: 2,
-        numKnockoutTeams: 8,
-        
-        // Paramètres avancés pour le scoring
-        scoringRules: {
-            win: 3,
-            loss: 1,
-            draw: 2,
-            forfeit: 0
+        info: {
+            name: '',
+            date: '',
+            location: '',
+            format: ''
         },
-        useCustomScoring: false,
-        
-        // Critères de départage (ordre de priorité)
-        tiebreakers: ['points', 'wins', 'pointsDiff', 'pointsFor'],
-        
-        // Durées de match
-        matchDuration: 30,
-        breakBetweenMatches: 5,
-        
-        // Pauses planifiées
-        scheduledBreaks: [],
-        useScheduledBreaks: false,
-        
-        // Paramètres d'urgence
-        emergencySettings: {
-            enabled: true,
-            allowLateRegistration: true,
-            allowPoolModification: true,
-            allowFormatChange: false
+        config: {
+            numPools: 2,
+            teamsPerPool: 4,
+            matchesPerTeam: 3,
+            qualificationMode: 'top-n',
+            teamsQualifying: 2,
+            numKnockoutTeams: 8,
+            
+            // Paramètres avancés pour le scoring
+            scoringRules: {
+                win: 3,
+                loss: 1,
+                draw: 2,
+                forfeit: 0
+            },
+            useCustomScoring: false,
+            
+            // Critères de départage (ordre de priorité)
+            tiebreakers: ['points', 'wins', 'pointsDiff', 'pointsFor'],
+            
+            // Durées de match
+            matchDuration: 30,
+            breakBetweenMatches: 5,
+            
+            // Pauses planifiées
+            scheduledBreaks: [],
+            useScheduledBreaks: false,
+            
+            // Paramètres d'urgence
+            emergencySettings: {
+                enabled: true,
+                allowLateRegistration: true,
+                allowPoolModification: true,
+                allowFormatChange: false
+            }
+        },
+        teams: [],
+        pools: [],
+        matches: [],
+        knockout: {
+            rounds: [],
+            matches: []
+        },
+        settings: {
+            theme: 'default'
         }
-    },
-    teams: [],
-    pools: [],
-    matches: [],
-    knockout: {
-        rounds: [],
-        matches: []
-    },
-    settings: {
-        theme: 'default'
-    }
-};
+    };
 
     /**
      * Enregistre les données du tournoi dans le localStorage
@@ -211,8 +210,8 @@ const TournamentData = (function() {
         saveToLocalStorage();
     }
 
- return {
-        // Vos fonctions exposées
+    return {
+        // Getters
         getTournament: () => tournament,
         getInfo: () => tournament.info,
         getConfig: () => tournament.config,
