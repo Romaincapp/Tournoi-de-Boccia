@@ -504,16 +504,16 @@
     <!-- Script PWA -->
     <script>
         // Enregistrement du Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(function(registration) {
-                        console.log('Service Worker enregistré avec succès:', registration.scope);
-                    })
-                    .catch(function(error) {
-                        console.log('Erreur lors de l\'enregistrement du Service Worker:', error);
-                    });
+       if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/Tournoi-de-Boccia/service-worker.js')
+            .then(function(registration) {
+                console.log('Service Worker enregistré avec succès:', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Erreur lors de l\'enregistrement du Service Worker:', error);
             });
+    });
             
             // Gestion des mises à jour
             let refreshing = false;
