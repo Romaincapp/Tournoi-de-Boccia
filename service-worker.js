@@ -3,24 +3,25 @@ const CACHE_NAME = 'boccia-tournament-manager-v1';
 
 // Liste des fichiers à mettre en cache
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/css/responsive.css',
-  '/js/main.js',
-  '/js/config.js',
-  '/js/data.js',
-  '/js/ui.js',
-  '/js/teams.js',
-  '/js/pools.js',
-  '/js/matches.js',
-  '/js/knockout.js',
-  '/js/ranking.js',
-  '/js/export.js',
-  '/manifest.json',
-  '/favicon.ico',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/Tournoi-de-Boccia/',
+  '/Tournoi-de-Boccia/index.html',
+  '/Tournoi-de-Boccia/offline.html',
+  '/Tournoi-de-Boccia/css/style.css',
+  '/Tournoi-de-Boccia/css/responsive.css',
+  '/Tournoi-de-Boccia/js/main.js',
+  '/Tournoi-de-Boccia/js/config.js',
+  '/Tournoi-de-Boccia/js/data.js',
+  '/Tournoi-de-Boccia/js/ui.js',
+  '/Tournoi-de-Boccia/js/teams.js',
+  '/Tournoi-de-Boccia/js/pools.js',
+  '/Tournoi-de-Boccia/js/matches.js',
+  '/Tournoi-de-Boccia/js/knockout.js',
+  '/Tournoi-de-Boccia/js/ranking.js',
+  '/Tournoi-de-Boccia/js/export.js',
+  '/Tournoi-de-Boccia/manifest.json',
+  '/Tournoi-de-Boccia/favicon.ico',
+  '/Tournoi-de-Boccia/icons/icon-192x192.png',
+  '/Tournoi-de-Boccia/icons/icon-512x512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
@@ -98,12 +99,12 @@ self.addEventListener('fetch', event => {
             
             // Pour les requêtes de navigation, retourner la page hors ligne
             if (event.request.mode === 'navigate') {
-              return caches.match('/offline.html');
+              return caches.match('/Tournoi-de-Boccia/offline.html');
             }
             
             // Pour les images, retourner une image de remplacement
             if (event.request.destination === 'image') {
-              return caches.match('/images/offline.png');
+              return caches.match('/Tournoi-de-Boccia/images/offline.png');
             }
             
             // Pour les autres ressources, retourner simplement l'erreur
