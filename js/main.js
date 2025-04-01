@@ -355,7 +355,7 @@ function initializeMatchFilters() {
                     break;
                 case 'played':
                     card.style.display = isPlayed ? '' : 'none';
-                    break;
+                  break;
                 case 'forfeit':
                     card.style.display = isForfeit ? '' : 'none';
                     break;
