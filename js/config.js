@@ -1,5 +1,5 @@
 const ConfigManager = (function() {
-    // Ajoutez cette vérification au début
+    // Vérification de TournamentData
     if (typeof TournamentData === 'undefined') {
         console.error('TournamentData is not loaded');
         return {
@@ -14,6 +14,18 @@ const ConfigManager = (function() {
             }
         };
     }
+
+   
+
+    // ... autres fonctions ...
+
+    // API publique
+    return {
+        initWizard,
+        initEventListeners,
+        resetTournament
+    };
+})();
 
 /**
  * Gestion de la configuration du tournoi
