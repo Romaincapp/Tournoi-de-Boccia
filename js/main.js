@@ -1,3 +1,25 @@
+function initializeApp() {
+    // Vérifiez l'existence des modules
+    if (typeof UI === 'undefined') console.error('UI module not loaded');
+    if (typeof TournamentData === 'undefined') console.error('TournamentData module not loaded');
+    if (typeof ConfigManager === 'undefined') console.error('ConfigManager module not loaded');
+    if (typeof PoolsManager === 'undefined') console.error('PoolsManager module not loaded');
+    if (typeof TeamsManager === 'undefined') console.error('TeamsManager module not loaded');
+    // ... autres vérifications
+
+    // Initialiser les modules uniquement s'ils existent
+    if (UI) UI.initEventListeners();
+    
+    if (ConfigManager) {
+        ConfigManager.initWizard();
+        ConfigManager.initEventListeners();
+    }
+
+    // Autres initialisations conditionnelles
+    if (TournamentData) {
+        TournamentData.loadFromLocalStorage();
+    }
+
 /**
  * Point d'entrée principal de l'application
  */
