@@ -13,19 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialise tous les modules de l'application
  */
 function initializeApp() {
-    // Vérifier l'existence des modules essentiels et afficher des erreurs si nécessaire
-    if (typeof UI === 'undefined') console.error('UI module not loaded');
-    if (typeof TournamentData === 'undefined') console.error('TournamentData module not loaded');
-    if (typeof ConfigManager === 'undefined') console.error('ConfigManager module not loaded');
-    if (typeof PoolsManager === 'undefined') console.error('PoolsManager module not loaded');
-    if (typeof TeamsManager === 'undefined') console.error('TeamsManager module not loaded');
-    if (typeof MatchesManager === 'undefined') console.error('MatchesManager module not loaded');
-    if (typeof KnockoutManager === 'undefined') console.error('KnockoutManager module not loaded');
-    if (typeof RankingManager === 'undefined') console.error('RankingManager module not loaded');
-    if (typeof CourtsManager === 'undefined') console.error('CourtsManager module not loaded');
-    if (typeof SyncManager === 'undefined') console.error('SyncManager module not loaded');
-    if (typeof ExportManager === 'undefined') console.error('ExportManager module not loaded');
-    
     // Initialiser l'interface utilisateur si elle existe
     if (typeof UI !== 'undefined') {
         UI.initEventListeners();
@@ -71,34 +58,50 @@ function initializeApp() {
     // Initialiser la gestion des courts et planification dans les menus
     initializeMenuItems();
     
-    // Vérifier s'il y a un tournoi sauvegardé
-    if (typeof TournamentData !== 'undefined' && TournamentData.loadFromLocalStorage()) {
-        // Afficher l'interface principale
-        document.getElementById('configuration-wizard').classList.add('hidden');
-        document.getElementById('main-interface').classList.remove('hidden');
+    // Afficher l'assistant de configuration par défaut
+    document.getElementById('configuration-wizard').classList.remove('hidden');
+    document.getElementById('main-interface').classList.add('hidden');
+    
+    // S'assurer que la première étape est visible
+    document.getElementById('wizard-step-1').classList.remove('hidden');
+    document.getElementById('wizard-step-2').classList.add('hidden');
+    document.getElementById('wizard-step-3').classList.add('hidden');
+    document.getElementById('wizard-step-4').classList.add('hidden');
+    
+    // Vérifier s'il y a un tournoi sauvegardé et si oui, l'afficher
+    if (typeof TournamentData !== 'undefined') {
+        const hasTournament = TournamentData.loadFromLocalStorage();
+        const tournament = TournamentData.getTournament();
         
-        // Mettre à jour l'interface
-        if (typeof UI !== 'undefined') UI.updateDashboard();
-        if (typeof TeamsManager !== 'undefined') TeamsManager.renderTeams();
-        if (typeof PoolsManager !== 'undefined') PoolsManager.renderPools();
-        if (typeof MatchesManager !== 'undefined') MatchesManager.renderMatches();
-        if (typeof KnockoutManager !== 'undefined') KnockoutManager.renderKnockoutBracket();
-        if (typeof RankingManager !== 'undefined') RankingManager.renderOverallRanking();
-        
-        // Appliquer le thème sauvegardé
-        if (typeof UI !== 'undefined') {
-            UI.setTheme(TournamentData.getSettings().theme);
-            const themeSelector = document.getElementById('theme-selector');
-            if (themeSelector) {
-                themeSelector.value = TournamentData.getSettings().theme;
+        // Si un tournoi valide est trouvé, afficher l'interface principale
+        if (hasTournament && tournament && tournament.info && tournament.info.name) {
+            // Afficher l'interface principale
+            document.getElementById('configuration-wizard').classList.add('hidden');
+            document.getElementById('main-interface').classList.remove('hidden');
+            
+            // Mettre à jour l'interface
+            if (typeof UI !== 'undefined') UI.updateDashboard();
+            if (typeof TeamsManager !== 'undefined') TeamsManager.renderTeams();
+            if (typeof PoolsManager !== 'undefined') PoolsManager.renderPools();
+            if (typeof MatchesManager !== 'undefined') MatchesManager.renderMatches();
+            if (typeof KnockoutManager !== 'undefined') KnockoutManager.renderKnockoutBracket();
+            if (typeof RankingManager !== 'undefined') RankingManager.renderOverallRanking();
+            
+            // Appliquer le thème sauvegardé
+            if (typeof UI !== 'undefined') {
+                UI.setTheme(TournamentData.getSettings().theme);
+                const themeSelector = document.getElementById('theme-selector');
+                if (themeSelector) {
+                    themeSelector.value = TournamentData.getSettings().theme;
+                }
             }
-        }
-        
-        // Initialiser la recherche d'équipes
-        initializeTeamSearch();
-        
-        if (typeof UI !== 'undefined') {
-            UI.showAlert('Tournoi chargé depuis le stockage local');
+            
+            // Initialiser la recherche d'équipes
+            initializeTeamSearch();
+            
+            if (typeof UI !== 'undefined') {
+                UI.showAlert('Tournoi chargé depuis le stockage local');
+            }
         }
     }
     
@@ -433,3 +436,38 @@ function initializeMatchFilters() {
         });
     });
 }
+
+// Fonction pour réinitialiser complètement l'application (utile pour le débogage)
+function resetApplication() {
+    localStorage.removeItem('bocciaTournament');
+    localStorage.removeItem('bocciaCourts');
+    localStorage.removeItem('bocciaSchedule');
+    localStorage.removeItem('bocciaSyncConfig');
+    window.location.reload();
+}
+
+// Ajouter un bouton de réinitialisation accessible directement depuis la page
+window.addEventListener('load', function() {
+    // Créer un bouton flottant pour réinitialiser l'application
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Réinitialiser App';
+    resetButton.style.position = 'fixed';
+    resetButton.style.bottom = '10px';
+    resetButton.style.right = '10px';
+    resetButton.style.zIndex = '9999';
+    resetButton.style.backgroundColor = '#e74c3c';
+    resetButton.style.color = 'white';
+    resetButton.style.border = 'none';
+    resetButton.style.borderRadius = '5px';
+    resetButton.style.padding = '5px 10px';
+    resetButton.style.cursor = 'pointer';
+    resetButton.style.fontSize = '12px';
+    
+    resetButton.addEventListener('click', function() {
+        if (confirm('Êtes-vous sûr de vouloir réinitialiser complètement l\'application ? Toutes les données seront perdues.')) {
+            resetApplication();
+        }
+    });
+    
+    document.body.appendChild(resetButton);
+});
