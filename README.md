@@ -1,8 +1,12 @@
 # Tournoi-de-Boccia
-Tournoi de Boccia
-# Gestionnaire de Tournois de Boccia
 
-Une application web complète pour organiser et gérer des tournois de Boccia, avec une interface intuitive et des fonctionnalités avancées.
+## Qu'est-ce que la Boccia?
+
+La Boccia est un sport de précision apparenté à la pétanque, adapté aux personnes en situation de handicap moteur. Ce sport paralympique se joue en individuel, en doublette ou en triplette avec des balles en cuir.
+
+## À propos du projet
+
+Une application web complète pour organiser et gérer des tournois de Boccia, développée avec une approche "web first" permettant une utilisation sur tout appareil. Notre interface intuitive et nos fonctionnalités avancées simplifient l'organisation de tournois de toutes tailles.
 
 ## Caractéristiques principales
 
@@ -15,14 +19,14 @@ Une application web complète pour organiser et gérer des tournois de Boccia, a
 - **Classements automatiques** : calcul des classements selon les critères officiels
 - **Phase finale** : création et gestion de tableaux à élimination directe
 
-### Nouvelles fonctionnalités
+### Fonctionnalités étendues
 - **Application Progressive (PWA)** : installation sur l'appareil, fonctionnement hors ligne
 - **Exportation PDF professionnelle** : feuilles de match, classements et tableaux
 - **Planification de terrains** : gestion des terrains disponibles pour les matchs
 - **Planning horaire** : organisation optimisée des matchs avec gestion des pauses
-- **Synchronisation cloud** : sauvegarde et partage des tournois entre appareils
+- **Stockage local** : sauvegarde des données dans le navigateur
 - **Export multi-formats** : JSON, PDF, CSV, package ZIP complet
-- **Interface adaptative** : thèmes multiples et options d'accessibilité
+- **Interface adaptative** : responsive design pour tous les appareils
 
 ## Installation
 
@@ -31,7 +35,7 @@ Une application web complète pour organiser et gérer des tournois de Boccia, a
    ```
    git clone https://github.com/votre-utilisateur/boccia-tournament-manager.git
    ```
-2. Ouvrez simplement le fichier `index.html` dans votre navigateur ou utilisez un serveur web.
+2. Ouvrez simplement le fichier `index.html` dans votre navigateur ou utilisez un serveur web local.
 
 ### Installation en tant qu'application (PWA)
 1. Visitez l'application dans Chrome, Edge ou un autre navigateur compatible

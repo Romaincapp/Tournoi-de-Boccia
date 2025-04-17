@@ -269,15 +269,11 @@ const ConfigManager = (function() {
                 });
             }
             
-            console.log("Pauses planifiées récupérées");
-            
             // Récupérer les paramètres d'urgence
             const enableEmergencyMode = document.getElementById('emergency-mode-toggle').checked;
             const allowLateRegistration = document.getElementById('allow-late-registration').checked;
             const allowPoolModification = document.getElementById('allow-pool-modification').checked;
             const allowFormatChange = document.getElementById('allow-format-change').checked;
-            
-            console.log("Paramètres d'urgence récupérés");
             
             // Sauvegarder les paramètres finaux
             TournamentData.updateConfig({
@@ -291,40 +287,25 @@ const ConfigManager = (function() {
                 }
             });
             
-            console.log("Configuration sauvegardée");
-            
-            // Basculer les interfaces - CRUCIAL: cela doit fonctionner correctement
-            console.log("Masquage de l'assistant de configuration");
-            document.getElementById('configuration-wizard').classList.add('hidden');
-            
-            console.log("Affichage de l'interface principale");
-            document.getElementById('main-interface').classList.remove('hidden');
-            
             // Créer les poules
-            console.log("Création des poules");
             if (typeof PoolsManager !== 'undefined') {
                 PoolsManager.createPools();
             }
             
-            // Mettre à jour le tableau de bord
-            console.log("Mise à jour du tableau de bord");
-            if (typeof UI !== 'undefined') {
-                UI.updateDashboard();
-            }
-            
             // Sauvegarder la configuration
-            console.log("Sauvegarde de la configuration dans le localStorage");
             TournamentData.saveToLocalStorage();
             
-            console.log("Affichage de l'alerte de confirmation");
-            UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.');
+            // CORRECTION: Forcer l'affichage de l'interface principale de façon plus robuste
+            document.getElementById('configuration-wizard').style.display = 'none';
+            document.getElementById('main-interface').style.display = 'block';
+            document.getElementById('configuration-wizard').classList.add('hidden');
+            document.getElementById('main-interface').classList.remove('hidden');
             
-            // Forcer un rafraîchissement du DOM
-            setTimeout(function() {
-                console.log("Rafraîchissement forcé du DOM");
-                document.getElementById('configuration-wizard').style.display = 'none';
-                document.getElementById('main-interface').style.display = 'block';
-            }, 100);
+            // Mettre à jour l'interface
+            if (typeof UI !== 'undefined') {
+                UI.updateDashboard();
+                UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.');
+            }
             
         } catch (error) {
             console.error("Erreur dans finishWizard():", error);
