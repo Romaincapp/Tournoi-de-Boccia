@@ -5,6 +5,9 @@
 
 // Attendre que le DOM soit chargé avant d'initialiser l'application
 document.addEventListener('DOMContentLoaded', function() {
+    // Ajouter un bouton d'urgence pour forcer l'affichage de l'interface principale
+    createEmergencyButton();
+    
     // Initialiser l'application
     initializeApp();
 
@@ -20,7 +23,83 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+    
+    // Ajouter un raccourci clavier pour forcer l'affichage (Ctrl+Shift+I)
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.shiftKey && event.key === 'I') {
+            event.preventDefault();
+            forceShowMainInterface();
+        }
+    });
 });
+
+/**
+ * Crée un bouton d'urgence visible en permanence pour forcer l'affichage de l'interface
+ */
+function createEmergencyButton() {
+    const emergencyBtn = document.createElement('button');
+    emergencyBtn.textContent = 'Forcer l\'affichage de l\'interface';
+    emergencyBtn.id = 'emergency-interface-btn';
+    emergencyBtn.style.position = 'fixed';
+    emergencyBtn.style.top = '10px';
+    emergencyBtn.style.left = '10px';
+    emergencyBtn.style.zIndex = '9999';
+    emergencyBtn.style.backgroundColor = '#ff9800';
+    emergencyBtn.style.color = 'white';
+    emergencyBtn.style.border = 'none';
+    emergencyBtn.style.borderRadius = '5px';
+    emergencyBtn.style.padding = '10px';
+    emergencyBtn.style.cursor = 'pointer';
+    emergencyBtn.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+    
+    emergencyBtn.addEventListener('click', function() {
+        forceShowMainInterface();
+    });
+    
+    document.body.appendChild(emergencyBtn);
+    console.log('Bouton d\'urgence créé et ajouté au DOM');
+}
+
+/**
+ * Force l'affichage de l'interface principale
+ */
+function forceShowMainInterface() {
+    console.log('Tentative de forçage de l\'affichage de l\'interface principale');
+    
+    // Masquer le wizard de configuration et afficher l'interface principale
+    const configWizard = document.getElementById('configuration-wizard');
+    const mainInterface = document.getElementById('main-interface');
+    
+    if (configWizard) {
+        configWizard.classList.add('hidden');
+        console.log('Wizard masqué');
+    } else {
+        console.warn('Élément #configuration-wizard non trouvé');
+    }
+    
+    if (mainInterface) {
+        mainInterface.classList.remove('hidden');
+        console.log('Interface principale affichée');
+        
+        // Si l'interface utilisateur est disponible, mettre à jour le tableau de bord
+        if (typeof UI !== 'undefined') {
+            UI.updateDashboard();
+        }
+    } else {
+        console.warn('Élément #main-interface non trouvé');
+        
+        // Afficher une alerte pour informer l'utilisateur
+        alert('Impossible de trouver l\'élément #main-interface dans le DOM. Vérifiez que votre HTML contient bien cet élément.');
+    }
+    
+    // Afficher l'état actuel des éléments clés du DOM
+    console.log('État des éléments DOM :', {
+        'configuration-wizard': document.getElementById('configuration-wizard') ? 'trouvé' : 'non trouvé',
+        'main-interface': document.getElementById('main-interface') ? 'trouvé' : 'non trouvé',
+        'wizard-step-1': document.getElementById('wizard-step-1') ? 'trouvé' : 'non trouvé',
+        'dashboard-tab': document.getElementById('dashboard-tab') ? 'trouvé' : 'non trouvé'
+    });
+}
 
 /**
  * Initialise tous les modules de l'application
@@ -71,55 +150,77 @@ function initializeApp() {
     // Initialiser la gestion des courts et planification dans les menus
     initializeMenuItems();
     
-    // Afficher l'assistant de configuration par défaut
-    document.getElementById('configuration-wizard').classList.remove('hidden');
-    document.getElementById('main-interface').classList.add('hidden');
+    // Afficher l'assistant de configuration par défaut, mais s'assurer que l'interface principale est accessible
+    const configWizard = document.getElementById('configuration-wizard');
+    const mainInterface = document.getElementById('main-interface');
     
-    // S'assurer que la première étape est visible
-    document.getElementById('wizard-step-1').classList.remove('hidden');
-    document.getElementById('wizard-step-2').classList.add('hidden');
-    document.getElementById('wizard-step-3').classList.add('hidden');
-    document.getElementById('wizard-step-4').classList.add('hidden');
+    if (configWizard && mainInterface) {
+        configWizard.classList.remove('hidden');
+        mainInterface.classList.add('hidden');
+        
+        // S'assurer que la première étape est visible
+        const wizardStep1 = document.getElementById('wizard-step-1');
+        if (wizardStep1) {
+            wizardStep1.classList.remove('hidden');
+        } else {
+            console.warn('Élément #wizard-step-1 non trouvé');
+        }
+    } else {
+        console.error('Éléments critiques manquants:', {
+            'configuration-wizard': !!configWizard,
+            'main-interface': !!mainInterface
+        });
+    }
     
     // Vérifier s'il y a un tournoi sauvegardé et si oui, l'afficher
     if (typeof TournamentData !== 'undefined') {
-        const hasTournament = TournamentData.loadFromLocalStorage();
-        const tournament = TournamentData.getTournament();
-        
-        // Si un tournoi valide est trouvé, afficher l'interface principale
-        if (hasTournament && tournament && tournament.info && tournament.info.name) {
-            // Afficher l'interface principale
-            document.getElementById('configuration-wizard').classList.add('hidden');
-            document.getElementById('main-interface').classList.remove('hidden');
+        try {
+            const hasTournament = TournamentData.loadFromLocalStorage();
+            const tournament = TournamentData.getTournament();
             
-            // Mettre à jour l'interface
-            if (typeof UI !== 'undefined') UI.updateDashboard();
-            if (typeof TeamsManager !== 'undefined') TeamsManager.renderTeams();
-            if (typeof PoolsManager !== 'undefined') PoolsManager.renderPools();
-            if (typeof MatchesManager !== 'undefined') MatchesManager.renderMatches();
-            if (typeof KnockoutManager !== 'undefined') KnockoutManager.renderKnockoutBracket();
-            if (typeof RankingManager !== 'undefined') RankingManager.renderOverallRanking();
-            
-            // Appliquer le thème sauvegardé
-            if (typeof UI !== 'undefined') {
-                UI.setTheme(TournamentData.getSettings().theme);
-                const themeSelector = document.getElementById('theme-selector');
-                if (themeSelector) {
-                    themeSelector.value = TournamentData.getSettings().theme;
+            // Si un tournoi valide est trouvé, afficher l'interface principale
+            if (hasTournament && tournament && tournament.info && tournament.info.name) {
+                // Afficher l'interface principale
+                if (configWizard && mainInterface) {
+                    configWizard.classList.add('hidden');
+                    mainInterface.classList.remove('hidden');
+                    console.log('Interface principale affichée (tournoi trouvé)');
+                }
+                
+                // Mettre à jour l'interface
+                if (typeof UI !== 'undefined') UI.updateDashboard();
+                if (typeof TeamsManager !== 'undefined') TeamsManager.renderTeams();
+                if (typeof PoolsManager !== 'undefined') PoolsManager.renderPools();
+                if (typeof MatchesManager !== 'undefined') MatchesManager.renderMatches();
+                if (typeof KnockoutManager !== 'undefined') KnockoutManager.renderKnockoutBracket();
+                if (typeof RankingManager !== 'undefined') RankingManager.renderOverallRanking();
+                
+                // Appliquer le thème sauvegardé
+                if (typeof UI !== 'undefined') {
+                    UI.setTheme(TournamentData.getSettings().theme);
+                    const themeSelector = document.getElementById('theme-selector');
+                    if (themeSelector) {
+                        themeSelector.value = TournamentData.getSettings().theme;
+                    }
+                }
+                
+                // Initialiser la recherche d'équipes
+                initializeTeamSearch();
+                
+                if (typeof UI !== 'undefined') {
+                    UI.showAlert('Tournoi chargé depuis le stockage local');
                 }
             }
-            
-            // Initialiser la recherche d'équipes
-            initializeTeamSearch();
-            
-            if (typeof UI !== 'undefined') {
-                UI.showAlert('Tournoi chargé depuis le stockage local');
-            }
+        } catch (error) {
+            console.error('Erreur lors du chargement du tournoi:', error);
         }
     }
     
     // Ajouter des fonctionnalités supplémentaires
     addExtraFeatures();
+    
+    // Vérifier l'état de l'interface après 2 secondes (permet de détecter les problèmes)
+    setTimeout(checkInterfaceState, 2000);
 }
 
 /**
@@ -649,4 +750,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+/**
+ * Vérifie l'état de l'interface et affiche des informations de débogage
+ */
+function checkInterfaceState() {
+    const configWizard = document.getElementById('configuration-wizard');
+    const mainInterface = document.getElementById('main-interface');
+    
+    console.log('État de l\'interface après initialisation:');
+    console.log('- configuration-wizard:', configWizard ? 
+        (configWizard.classList.contains('hidden') ? 'caché' : 'visible') : 'non trouvé');
+    console.log('- main-interface:', mainInterface ? 
+        (mainInterface.classList.contains('hidden') ? 'caché' : 'visible') : 'non trouvé');
+    
+    // Si les deux interfaces sont cachées ou absentes, essayer de forcer l'affichage
+    if (!configWizard || !mainInterface || 
+        (configWizard.classList.contains('hidden') && mainInterface.classList.contains('hidden'))) {
+        console.warn('Aucune interface n\'est visible! Tentative de forçage...');
+        forceShowMainInterface();
+    }
+}
 
