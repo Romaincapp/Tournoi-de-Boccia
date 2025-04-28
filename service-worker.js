@@ -39,8 +39,12 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Cache ouvert');
-        // Ajouter toutes les URLs au cache
-        return cache.addAll(urlsToCache);
+        // Ajouter toutes les URLs au cache avec gestion d'erreurs
+        return cache.addAll(urlsToCache)
+          .catch(error => {
+            console.error('Erreur lors de la mise en cache des ressources:', error);
+            // Vous pouvez également lister individuellement les ressources qui posent problème
+          });
       })
       .then(() => self.skipWaiting()) // Activer immédiatement
   );
@@ -73,7 +77,7 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        
+
         // Sinon, faire la requête réseau
         return fetch(event.request)
           .then(response => {
@@ -81,32 +85,32 @@ self.addEventListener('fetch', event => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
-            
+
             // Cloner la réponse (stream ne peut être lu qu'une fois)
             const responseToCache = response.clone();
-            
+
             // Ouvrir le cache et ajouter la nouvelle réponse
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
               });
-            
+
             return response;
           })
           .catch(error => {
             // Gérer l'échec réseau
             console.log('Erreur de récupération:', error);
-            
+
             // Pour les requêtes de navigation, retourner la page hors ligne
             if (event.request.mode === 'navigate') {
               return caches.match('/Tournoi-de-Boccia/offline.html');
             }
-            
+
             // Pour les images, retourner une image de remplacement
             if (event.request.destination === 'image') {
               return caches.match('/Tournoi-de-Boccia/images/offline.png');
             }
-            
+
             // Pour les autres ressources, retourner simplement l'erreur
             return new Response('Ressource non disponible hors ligne', {
               status: 503,
@@ -139,3 +143,4 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
+
