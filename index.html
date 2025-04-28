@@ -255,6 +255,16 @@
 
         <!-- Interface Principale -->
         <div id="main-interface" class="hidden">
+            <!-- Bouton de débogage pour afficher le statut -->
+            <div style="background-color: #ffeb3b; padding: 10px; margin-bottom: 15px; border-radius: 5px;" id="debug-status">
+                État de transition: En attente
+            </div>
+            
+            <!-- Bouton de secours pour forcer l'affichage -->
+            <button id="force-show-interface" class="btn btn-primary" style="margin-bottom: 15px;">
+                Forcer l'affichage de l'interface
+            </button>
+            
             <div class="tab-container">
                 <div class="tab-buttons">
                     <button class="tab-button active" data-tab="dashboard">Tableau de Bord</button>

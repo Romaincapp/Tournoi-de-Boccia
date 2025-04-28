@@ -485,3 +485,168 @@ window.addEventListener('load', function() {
     document.body.appendChild(resetButton);
 });
 
+// Amélioration de la gestion de la transition entre le wizard et l'interface principale
+document.addEventListener('DOMContentLoaded', function() {
+    // Référence vers les éléments principaux
+    const configWizard = document.getElementById('configuration-wizard');
+    const mainInterface = document.getElementById('main-interface');
+    const wizardFinishBtn = document.getElementById('wizard-finish');
+    const forceShowBtn = document.getElementById('force-show-interface');
+    const debugStatus = document.getElementById('debug-status');
+    
+    // Vérifier si un tournoi existe déjà en mémoire
+    const savedTournament = localStorage.getItem('bocciaTournament');
+    if (savedTournament) {
+        try {
+            const tournamentData = JSON.parse(savedTournament);
+            if (tournamentData && tournamentData.name) {
+                console.log('Tournoi trouvé en mémoire, affichage de l\'interface principale');
+                showMainInterface();
+            }
+        } catch (e) {
+            console.error('Erreur lors du chargement du tournoi:', e);
+        }
+    }
+    
+    // Événement pour le bouton de finalisation du wizard
+    if (wizardFinishBtn) {
+        wizardFinishBtn.addEventListener('click', function() {
+            logTransition("Bouton Terminer cliqué");
+            // Collecter et sauvegarder les données du tournoi
+            const tournamentData = collectTournamentData();
+            localStorage.setItem('bocciaTournament', JSON.stringify(tournamentData));
+            
+            // Afficher l'interface principale
+            showMainInterface();
+        });
+    }
+    
+    // Bouton de secours pour forcer l'affichage
+    if (forceShowBtn) {
+        forceShowBtn.addEventListener('click', function() {
+            logTransition("Bouton de secours cliqué");
+            showMainInterface();
+        });
+    }
+    
+    // Fonction pour afficher l'interface principale
+    function showMainInterface() {
+        logTransition("Tentative d'affichage de l'interface principale");
+        if (configWizard && mainInterface) {
+            configWizard.classList.add('hidden');
+            mainInterface.classList.remove('hidden');
+            logTransition("Interface principale affichée avec succès");
+            
+            // Initialiser les onglets et le contenu initial
+            initializeMainInterface();
+        } else {
+            logTransition("ERREUR: Éléments DOM non trouvés");
+            console.error('Éléments DOM non trouvés:', { 
+                configWizard: !!configWizard, 
+                mainInterface: !!mainInterface 
+            });
+        }
+    }
+    
+    // Fonction pour collecter les données du formulaire de configuration
+    function collectTournamentData() {
+        const data = {
+            name: document.getElementById('tournament-name').value || 'Tournoi sans nom',
+            date: document.getElementById('tournament-date').value || new Date().toISOString().split('T')[0],
+            location: document.getElementById('tournament-location').value || 'Non spécifié',
+            format: document.getElementById('tournament-format').value || 'pools-only',
+            pools: {
+                count: parseInt(document.getElementById('num-pools').value) || 2,
+                teamsPerPool: parseInt(document.getElementById('teams-per-pool').value) || 4,
+                matchesPerTeam: parseInt(document.getElementById('matches-per-team').value) || 3,
+                teamsQualifying: parseInt(document.getElementById('teams-qualifying').value) || 2,
+                qualificationMode: document.getElementById('qualification-mode').value || 'top-n'
+            },
+            knockout: {
+                teams: parseInt(document.getElementById('num-knockout-teams').value) || 8
+            },
+            scoring: {
+                win: parseInt(document.getElementById('points-win').value) || 3,
+                loss: parseInt(document.getElementById('points-loss').value) || 1,
+                draw: parseInt(document.getElementById('points-draw').value) || 2,
+                forfeit: parseInt(document.getElementById('points-forfeit').value) || 0
+            },
+            teams: [],
+            matches: [],
+            createdAt: new Date().toISOString()
+        };
+        
+        return data;
+    }
+    
+    // Initialisation de l'interface principale
+    function initializeMainInterface() {
+        // Gérer les onglets
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Désactiver tous les onglets
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                
+                // Activer l'onglet sélectionné
+                this.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Charger les informations du tournoi dans le dashboard
+        updateDashboard();
+    }
+    
+    // Mise à jour du tableau de bord avec les informations du tournoi
+    function updateDashboard() {
+        try {
+            const tournamentData = JSON.parse(localStorage.getItem('bocciaTournament') || '{}');
+            
+            // Mise à jour des informations de base du tournoi
+            document.getElementById('dashboard-tournament-name').textContent = tournamentData.name || 'Non défini';
+            document.getElementById('dashboard-tournament-date').textContent = tournamentData.date || 'Non défini';
+            document.getElementById('dashboard-tournament-location').textContent = tournamentData.location || 'Non défini';
+            
+            // Format du tournoi en français
+            let format = 'Non défini';
+            if (tournamentData.format === 'pools-only') format = 'Poules uniquement';
+            else if (tournamentData.format === 'knockout-only') format = 'Élimination directe uniquement';
+            else if (tournamentData.format === 'pools-knockout') format = 'Poules suivies d\'élimination directe';
+            
+            document.getElementById('dashboard-tournament-format').textContent = format;
+            
+            // Statistiques du tournoi
+            document.getElementById('dashboard-teams-count').textContent = tournamentData.teams ? tournamentData.teams.length : 0;
+            document.getElementById('dashboard-pools-count').textContent = tournamentData.pools ? tournamentData.pools.count : 0;
+            
+            // Progression des matchs
+            const matchesPlayed = tournamentData.matches ? tournamentData.matches.filter(match => match.status === 'completed').length : 0;
+            const totalMatches = tournamentData.matches ? tournamentData.matches.length : 0;
+            document.getElementById('dashboard-matches-played').textContent = matchesPlayed;
+            document.getElementById('dashboard-total-matches').textContent = totalMatches;
+            
+            // Barre de progression
+            const progressPercentage = totalMatches > 0 ? (matchesPlayed / totalMatches) * 100 : 0;
+            document.getElementById('progress-bar-fill').style.width = `${progressPercentage}%`;
+            
+        } catch (e) {
+            console.error('Erreur lors de la mise à jour du dashboard:', e);
+        }
+    }
+    
+    // Fonction pour journaliser les transitions pour le débogage
+    function logTransition(message) {
+        console.log(`[Transition]: ${message}`);
+        if (debugStatus) {
+            debugStatus.innerHTML = `<strong>État de transition:</strong> ${message} <br>` +
+                                   `<small>Horodatage: ${new Date().toLocaleTimeString()}</small>`;
+        }
+    }
+});
+
