@@ -69,51 +69,95 @@ Une application web complète pour organiser et gérer des tournois de Boccia, d
 2. **Package complet** : Exportez toutes les données dans un fichier ZIP
 3. **Synchronisation** : Partagez les données entre plusieurs appareils
 
+## Technologies utilisées
+
+- **Frontend**: HTML5, CSS3, JavaScript ES6+
+- **PWA**: Service Workers, Web App Manifest
+- **Persistance**: LocalStorage, IndexedDB
+- **Exports**: PDF.js, FileSaver.js
+- **UI/UX**: Responsive design, Material Design inspiration
+- **Build tools**: Webpack, Babel (pour la version de production)
+
 ## Structure technique
 
-L'application est construite avec une architecture modulaire en JavaScript vanilla, CSS et HTML:
+L'application est construite avec une architecture modulaire:
 
 ```
-/boccia-tournament-manager
+/tournoi-de-boccia
 │
-├── index.html                 # Structure HTML principale
+├── index.html                 # Page principale
 ├── offline.html               # Page hors ligne pour PWA
-├── manifest.json              # Manifeste pour l'installation PWA
-├── service-worker.js          # Service Worker pour le mode hors ligne
+├── manifest.json              # Manifeste PWA
+├── service-worker.js          # Service Worker
+│
+├── assets/                    # Ressources statiques
+│   ├── icons/                 # Icônes de l'application
+│   │   ├── icon-192x192.png   # Icône PWA
+│   │   └── icon-512x512.png   # Icône PWA large
+│   ├── images/                # Images générales
+│   └── fonts/                 # Polices personnalisées
 │
 ├── css/
 │   ├── style.css              # Styles principaux
-│   └── responsive.css         # Styles responsives
+│   ├── responsive.css         # Adaptations responsives
+│   └── themes/                # Thèmes (clair/sombre)
 │
 ├── js/
-│   ├── main.js                # Point d'entrée principal
-│   ├── config.js              # Configuration et initialisation
-│   ├── data.js                # Gestion des données et localStorage
-│   ├── ui.js                  # Fonctions d'interface utilisateur
-│   ├── teams.js               # Gestion des équipes
-│   ├── pools.js               # Gestion des poules
-│   ├── matches.js             # Gestion des matchs
-│   ├── knockout.js            # Gestion de la phase finale
-│   ├── ranking.js             # Gestion du classement général
-│   ├── export.js              # Exportation PDF et autres formats
-│   ├── courts.js              # Gestion des terrains et planification
-│   └── sync.js                # Synchronisation cloud
+│   ├── app/                   # Logique principale
+│   │   ├── main.js            # Point d'entrée
+│   │   ├── router.js          # Gestionnaire de routes
+│   │   └── config.js          # Configuration
+│   │
+│   ├── core/                  # Fonctionnalités de base
+│   │   ├── data.js            # Gestion des données
+│   │   ├── storage.js         # Stockage local
+│   │   └── api.js             # Interactions API (si applicable)
+│   │
+│   ├── modules/               # Modules fonctionnels
+│   │   ├── teams.js           # Gestion des équipes
+│   │   ├── pools.js           # Gestion des poules
+│   │   ├── matches.js         # Gestion des matchs
+│   │   ├── knockout.js        # Phase finale
+│   │   ├── rankings.js        # Classements
+│   │   ├── courts.js          # Gestion des terrains
+│   │   └── scheduler.js       # Planification
+│   │
+│   ├── ui/                    # Interface utilisateur
+│   │   ├── components.js      # Composants UI réutilisables
+│   │   ├── forms.js           # Gestion des formulaires
+│   │   ├── notifications.js   # Notifications utilisateur
+│   │   └── views.js           # Gestionnaire de vues
+│   │
+│   └── utils/                 # Utilitaires
+│       ├── export.js          # Exportation (PDF, CSV)
+│       ├── import.js          # Importation de données
+│       ├── validation.js      # Validation des données
+│       └── helpers.js         # Fonctions auxiliaires
 │
-├── icons/
-│   ├── icon-192x192.png       # Icônes pour PWA
-│   └── icon-512x512.png
+├── templates/                 # Modèles HTML pour les vues dynamiques
 │
 └── README.md                  # Documentation
 ```
 
 ## Fonctionnalités à venir
 
-- **Application mobile native** : Versions iOS/Android
-- **Mode arbitre** : Interface simplifiée pour la saisie des scores
-- **Mode spectateur** : Affichage public des matchs et résultats en temps réel
-- **Statistiques avancées** : Analyse des performances individuelles et d'équipes
-- **Multilingue** : Support de langues additionnelles
+- **Application mobile native** : Versions iOS/Android avec React Native
+- **Mode arbitre** : Interface simplifiée pour la saisie des scores en temps réel
+- **Mode spectateur** : Affichage public des matchs et résultats en temps réel sur grands écrans
+- **Statistiques avancées** : Analyse des performances individuelles et d'équipes avec visualisations
+- **Multilingue** : Support pour français, anglais, espagnol, allemand et italien
 - **Mode tournoi multiple** : Gestion de plusieurs tournois simultanés
+- **Authentification** : Système de comptes pour organisateurs et arbitres
+- **Intégration vidéo** : Support pour les replays et streaming des matchs importants
+- **API publique** : Pour intégration avec d'autres systèmes et applications
+- **Mode hors-connexion avancé** : Synchronisation automatique lors du retour en ligne
+
+## Support et contact
+
+Pour toute question ou assistance:
+- **Email**: support@tournoi-boccia.org
+- **Site web**: [www.tournoi-boccia.org](https://www.tournoi-boccia.org)
+- **Discord**: [Rejoindre notre communauté](https://discord.gg/boccia-tournament)
 
 ## Contribution
 
