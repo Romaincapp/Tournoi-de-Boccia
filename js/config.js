@@ -287,24 +287,32 @@ const ConfigManager = (function() {
                 }
             });
             
-            // Créer les poules
-            if (typeof PoolsManager !== 'undefined') {
+            // Initialiser les structures du tournoi
+            const tournamentFormat = TournamentData.getInfo().format || 'pools-knockout';
+            
+            // Créer les poules si le format le nécessite
+            if (typeof PoolsManager !== 'undefined' && (tournamentFormat === 'pools-only' || tournamentFormat === 'pools-knockout')) {
                 PoolsManager.createPools();
+            }
+            
+            // Initialiser le tableau des éliminations directes si le format le nécessite
+            if (typeof KnockoutManager !== 'undefined' && (tournamentFormat === 'knockout-only' || tournamentFormat === 'pools-knockout')) {
+                KnockoutManager.initBracket();
             }
             
             // Sauvegarder la configuration
             TournamentData.saveToLocalStorage();
             
-            // CORRECTION: Forcer l'affichage de l'interface principale de façon plus robuste
-            document.getElementById('configuration-wizard').style.display = 'none';
-            document.getElementById('main-interface').style.display = 'block';
+            // Basculer l'affichage de manière cohérente (une seule méthode)
             document.getElementById('configuration-wizard').classList.add('hidden');
             document.getElementById('main-interface').classList.remove('hidden');
             
             // Mettre à jour l'interface
             if (typeof UI !== 'undefined') {
                 UI.updateDashboard();
-                UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.');
+                UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.', 'success');
+            } else {
+                console.warn("Le module UI n'est pas défini, impossible de mettre à jour l'interface");
             }
             
         } catch (error) {
@@ -406,3 +414,7 @@ const ConfigManager = (function() {
         finishWizard
     };
 })();
+
+
+
+
