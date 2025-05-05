@@ -1,4 +1,3 @@
-
 /**
  * Gestion de l'interface utilisateur
  */
@@ -52,43 +51,65 @@ const UI = (function() {
         }
         
         const tournament = TournamentData.getTournament();
+        const info = TournamentData.getInfo();
         
-        document.getElementById('dashboard-tournament-name').textContent = tournament.info.name;
-        document.getElementById('dashboard-tournament-date').textContent = new Date(tournament.info.date).toLocaleDateString();
-        document.getElementById('dashboard-tournament-location').textContent = tournament.info.location;
-        
-        let formatText = '';
-        switch (tournament.info.format) {
-            case 'pools-only':
-                formatText = 'Poules uniquement';
-                break;
-            case 'knockout-only':
-                formatText = 'Élimination directe uniquement';
-                break;
-            case 'pools-knockout':
-                formatText = 'Poules suivies d\'élimination directe';
-                break;
-            default:
-                formatText = 'Non spécifié';
+        // Vérifications de sécurité
+        if (!info) {
+            console.error("Impossible d'accéder aux informations du tournoi");
+            return;
         }
         
-        document.getElementById('dashboard-tournament-format').textContent = formatText;
-        document.getElementById('dashboard-teams-count').textContent = tournament.teams.length;
-        document.getElementById('dashboard-pools-count').textContent = tournament.pools.length;
+        // Mettre à jour l'interface uniquement si les éléments existent
+        const elements = {
+            'dashboard-tournament-name': info.name || 'Non défini',
+            'dashboard-tournament-date': info.date ? new Date(info.date).toLocaleDateString() : 'Non défini',
+            'dashboard-tournament-location': info.location || 'Non défini',
+            'dashboard-tournament-format': getFormatText(info.format),
+            'dashboard-teams-count': tournament.teams ? tournament.teams.length : 0,
+            'dashboard-pools-count': tournament.pools ? tournament.pools.length : 0
+        };
         
-        const matchesPlayed = tournament.matches.filter(match => match.played).length + 
-                               tournament.knockout.matches.filter(match => match.played).length;
-        const totalMatches = tournament.matches.length + tournament.knockout.matches.length;
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            } else {
+                console.warn(`Élément ${id} non trouvé`);
+            }
+        });
         
-        document.getElementById('dashboard-matches-played').textContent = matchesPlayed;
-        document.getElementById('dashboard-total-matches').textContent = totalMatches;
+        // Statistiques des matchs
+        const matchesPlayed = (tournament.matches || []).filter(match => match.played).length + 
+                             ((tournament.knockout?.matches || []).filter(match => match.played).length);
+        const totalMatches = (tournament.matches || []).length + 
+                            ((tournament.knockout?.matches || []).length);
         
-        // Masquer l'onglet de phase finale si non applicable
-        if (tournament.info.format === 'pools-only') {
-            document.getElementById('knockout-tab').style.display = 'none';
-        } else {
-            document.getElementById('knockout-tab').style.display = 'inline-block';
+        updateElementSafely('dashboard-matches-played', matchesPlayed);
+        updateElementSafely('dashboard-total-matches', totalMatches);
+        
+        // Gestion de l'onglet phase finale
+        const knockoutTab = document.getElementById('knockout-tab');
+        if (knockoutTab && info.format) {
+            knockoutTab.style.display = info.format === 'pools-only' ? 'none' : 'inline-block';
         }
+    }
+
+    // Fonction utilitaire pour mettre à jour les éléments en toute sécurité
+    function updateElementSafely(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+    // Fonction pour obtenir le texte du format
+    function getFormatText(format) {
+        const formats = {
+            'pools-only': 'Poules uniquement',
+            'knockout-only': 'Élimination directe uniquement',
+            'pools-knockout': 'Poules suivies d\'élimination directe'
+        };
+        return formats[format] || 'Non spécifié';
     }
 
     /**

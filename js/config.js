@@ -289,6 +289,16 @@ const ConfigManager = (function() {
             
             // Initialiser les structures du tournoi
             const tournamentFormat = TournamentData.getInfo().format || 'pools-knockout';
+
+            // S'assurer que toutes les données de base sont bien définies
+            const tournament = TournamentData.getTournament();
+            const info = TournamentData.getInfo();
+
+            if (!info.format) {
+                TournamentData.updateInfo({
+                    format: tournamentFormat
+                });
+            }
             
             // Créer les poules si le format le nécessite
             if (typeof PoolsManager !== 'undefined' && (tournamentFormat === 'pools-only' || tournamentFormat === 'pools-knockout')) {
