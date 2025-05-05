@@ -512,3 +512,120 @@ const ExportManager = (function() {
         exportTournamentPackage
     };
 })();
+
+// Gestionnaire des fonctions d'exportation
+
+// Initialisation du module d'exportation
+function initExportModule() {
+    // Afficher/cacher le menu déroulant d'exportation
+    document.getElementById('export-dropdown-btn').addEventListener('click', function() {
+        document.getElementById('export-dropdown').classList.toggle('hidden');
+    });
+    
+    // Fermer le menu au clic en dehors
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.btn-group') && !document.getElementById('export-dropdown').classList.contains('hidden')) {
+            document.getElementById('export-dropdown').classList.add('hidden');
+        }
+    });
+
+    // Associer les actions d'exportation
+    document.querySelectorAll('[data-action^="export-"]').forEach(button => {
+        button.addEventListener('click', handleExportAction);
+    });
+
+    // Bouton d'impression
+    document.querySelector('[data-action="print-tournament"]').addEventListener('click', printTournament);
+}
+
+// Gestion des actions d'exportation
+function handleExportAction(event) {
+    const action = event.currentTarget.getAttribute('data-action');
+    
+    // Fermer le menu déroulant
+    document.getElementById('export-dropdown').classList.add('hidden');
+    
+    // Exécuter l'action appropriée
+    switch(action) {
+        case 'export-tournament':
+            exportTournamentJSON();
+            break;
+        case 'export-tournament-package':
+            exportTournamentPackage();
+            break;
+        case 'export-ranking-pdf':
+            exportRankingPDF();
+            break;
+        case 'export-matchsheets-pdf':
+            exportMatchsheetsPDF();
+            break;
+        case 'export-bracket-pdf':
+            exportBracketPDF();
+            break;
+    }
+}
+
+// Exportation du tournoi au format JSON
+function exportTournamentJSON() {
+    try {
+        const tournamentData = getTournamentData();
+        const dataStr = JSON.stringify(tournamentData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = `tournoi-boccia_${tournamentData.name.replace(/\s+/g, '-')}_${new Date().toISOString().split('T')[0]}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        showNotification('Tournoi exporté avec succès!', 'success');
+    } catch (error) {
+        console.error('Erreur lors de l\'exportation:', error);
+        showNotification('Erreur lors de l\'exportation du tournoi', 'error');
+    }
+}
+
+// Fonctions d'exportation à implémenter
+function exportTournamentPackage() {
+    // À implémenter - requiert bibliothèque ZIP JS
+    showNotification('Export ZIP en cours de développement', 'info');
+}
+
+function exportRankingPDF() {
+    // À implémenter - requiert bibliothèque PDF JS
+    showNotification('Export PDF du classement en cours de développement', 'info');
+}
+
+function exportMatchsheetsPDF() {
+    // À implémenter - requiert bibliothèque PDF JS
+    showNotification('Export PDF des feuilles de match en cours de développement', 'info');
+}
+
+function exportBracketPDF() {
+    // À implémenter - requiert bibliothèque PDF JS
+    showNotification('Export PDF du tableau final en cours de développement', 'info');
+}
+
+// Fonction d'impression
+function printTournament() {
+    window.print();
+}
+
+// Fonction utilitaire pour obtenir les données du tournoi
+function getTournamentData() {
+    // Récupérer depuis localStorage ou l'état de l'application
+    return JSON.parse(localStorage.getItem('bocciaTournament')) || {};
+}
+
+// Fonction utilitaire pour afficher notifications
+function showNotification(message, type = 'info') {
+    // Si vous avez une fonction de notification existante, utilisez-la ici
+    console.log(`[${type.toUpperCase()}] ${message}`);
+    
+    // Exemple simple de notification
+    alert(message);
+}
+
+// Initialiser le module lors du chargement
+document.addEventListener('DOMContentLoaded', initExportModule);

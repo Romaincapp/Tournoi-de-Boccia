@@ -12,9 +12,9 @@
     <meta name="mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Liens pour PWA -->
-    <link rel="manifest" href="/Tournoi-de-Boccia/manifest.json">
-    <link rel="icons" href="/tournoi-de-boccia/icons/icon-192x192.png" sizes="192x192" type="image/png">
-    <link rel="apple-touch-icon" href="icons/192x192.PNG">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/192x192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="icons/192x192.png">
     
     <!-- Styles externes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -301,17 +301,17 @@
                             <button class="btn" data-action="manage-teams">Gérer les Équipes</button>
                             <button class="btn" data-action="view-matches">Voir les Matchs</button>
                             <div class="btn-group">
-                                <button class="btn dropdown-toggle" id="export-dropdown-btn">
-                                    Exporter <i class="fas fa-caret-down"></i>
-                                </button>
-                                <div class="dropdown-menu hidden" id="export-dropdown">
-                                    <button class="dropdown-item" data-action="export-tournament">Exporter JSON</button>
-                                    <button class="dropdown-item" data-action="export-tournament-package">Export Complet (ZIP)</button>
-                                    <button class="dropdown-item" data-action="export-ranking-pdf">Classement (PDF)</button>
-                                    <button class="dropdown-item" data-action="export-matchsheets-pdf">Feuilles de Match (PDF)</button>
-                                    <button class="dropdown-item" data-action="export-bracket-pdf">Tableau Final (PDF)</button>
-                                </div>
-                            </div>
+    <button class="btn dropdown-toggle" id="export-dropdown-btn">
+        Exporter <i class="fas fa-caret-down"></i>
+    </button>
+    <div class="dropdown-menu hidden" id="export-dropdown">
+        <button class="dropdown-item" data-action="export-tournament">Exporter JSON</button>
+        <button class="dropdown-item" data-action="export-tournament-package">Export Complet (ZIP)</button>
+        <button class="dropdown-item" data-action="export-ranking-pdf">Classement (PDF)</button>
+        <button class="dropdown-item" data-action="export-matchsheets-pdf">Feuilles de Match (PDF)</button>
+        <button class="dropdown-item" data-action="export-bracket-pdf">Tableau Final (PDF)</button>
+    </div>
+</div>
                             <button class="btn" data-action="print-tournament">Imprimer</button>
                         </div>
                     </div>
