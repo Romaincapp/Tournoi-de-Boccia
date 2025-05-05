@@ -307,13 +307,15 @@ const ConfigManager = (function() {
             document.getElementById('configuration-wizard').classList.add('hidden');
             document.getElementById('main-interface').classList.remove('hidden');
             
-            // Mettre à jour l'interface
-            if (typeof UI !== 'undefined') {
-                UI.updateDashboard();
-                UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.', 'success');
-            } else {
-                console.warn("Le module UI n'est pas défini, impossible de mettre à jour l'interface");
-            }
+            // S'assurer que l'interface est mise à jour APRÈS que l'interface principale soit visible
+            setTimeout(() => {
+                if (typeof UI !== 'undefined') {
+                    UI.updateDashboard();
+                    UI.showAlert('Configuration terminée avec succès! Vous pouvez maintenant gérer votre tournoi.', 'success');
+                } else {
+                    console.warn("Le module UI n'est pas défini, impossible de mettre à jour l'interface");
+                }
+            }, 0);
             
         } catch (error) {
             console.error("Erreur dans finishWizard():", error);

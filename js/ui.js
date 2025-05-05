@@ -45,6 +45,12 @@ const UI = (function() {
      * Met à jour le tableau de bord avec les informations actuelles
      */
     function updateDashboard() {
+        // Vérifier que l'interface principale est visible avant de mettre à jour
+        if (document.getElementById('main-interface').classList.contains('hidden')) {
+            console.log("Impossible de mettre à jour le tableau de bord: interface principale cachée");
+            return;
+        }
+        
         const tournament = TournamentData.getTournament();
         
         document.getElementById('dashboard-tournament-name').textContent = tournament.info.name;

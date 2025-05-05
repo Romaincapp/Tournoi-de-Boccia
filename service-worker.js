@@ -19,9 +19,7 @@ const urlsToCache = [
   '/Tournoi-de-Boccia/js/ranking.js',
   '/Tournoi-de-Boccia/js/export.js',
   '/Tournoi-de-Boccia/manifest.json',
-  '/Tournoi-de-Boccia/favicon.ico',
-  '/Tournoi-de-Boccia/icons/icon-192x192.png',
-  '/Tournoi-de-Boccia/icons/icon-512x512.png',
+
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
