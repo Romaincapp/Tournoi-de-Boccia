@@ -380,10 +380,11 @@ tr:hover {
 
 .match-played {
     opacity: 0.7;
+    text-decoration: solid;
 }
 
 .match-pending {
-    /* Styles pour matchs en attente */
+    opacity: 0.7
 }
 
 .match-forfeit {

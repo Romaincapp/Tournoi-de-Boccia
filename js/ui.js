@@ -49,9 +49,7 @@ const UI = (function() {
         tabPane.classList.add('active');
     }
 
-    /**
-     * Met à jour le tableau de bord avec les informations actuelles
-     */
+    
     function updateDashboard() {
         // Vérifier que l'interface principale est visible avant de mettre à jour
         if (document.getElementById('main-interface').classList.contains('hidden')) {
@@ -492,4 +490,13 @@ return {
     printRanking    // Ajouter ici
 };
 */
+
+// À exécuter après le chargement de la page ou lors de l'initialisation du tournoi
+function showMainInterface() {
+    const mainInterface = document.getElementById('main-interface');
+    if (mainInterface) {
+        mainInterface.classList.remove('hidden');
+        updateDashboard(); // Mettre à jour le tableau de bord une fois l'interface visible
+    }
+}
 
