@@ -9,13 +9,13 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "./icons/icon-192x192.png",
+      "src": "./icons/192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-512x512.png",
+      "src": "./icons/512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -44,14 +44,14 @@
       "short_name": "Nouveau",
       "description": "Créer un nouveau tournoi",
       "url": "./index.html?action=new",
-      "icons": [{ "src": "./icons/new-tournament.png", "sizes": "96x96" }]
+      "icons": [{ "src": "./icons/192x192.png", "sizes": "96x96" }]
     },
     {
       "name": "Gestion des équipes",
       "short_name": "Équipes",
       "description": "Gérer les équipes du tournoi",
       "url": "./index.html?tab=teams",
-      "icons": [{ "src": "./icons/teams.png", "sizes": "96x96" }]
+      "icons": [{ "src": "./icons/192x192.png", "sizes": "96x96" }]
     }
   ],
   "related_applications": [],
