@@ -31,6 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
             forceShowMainInterface();
         }
     });
+
+    // Initialiser l'interface utilisateur
+    UI.initEventListeners();
+    
+    // Afficher l'onglet par défaut (dashboard) une fois que tout est initialisé
+    setTimeout(() => {
+        UI.showTab('dashboard');  // ou tout autre onglet par défaut
+        UI.debugUI();  // Afficher les infos de débogage
+    }, 100);
 });
 
 /**

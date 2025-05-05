@@ -26,6 +26,15 @@ const UI = (function() {
      * @param {string} tabId - ID de l'onglet à afficher
      */
     function showTab(tabId) {
+        // Vérifier que les éléments existent avant de continuer
+        const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+        const tabPane = document.getElementById(`${tabId}-tab`);
+        
+        if (!tabButton || !tabPane) {
+            console.error(`Onglet "${tabId}" non trouvé. Button: ${!!tabButton}, Pane: ${!!tabPane}`);
+            return;
+        }
+        
         // Désactiver tous les onglets
         document.querySelectorAll('.tab-button').forEach(button => {
             button.classList.remove('active');
@@ -36,8 +45,8 @@ const UI = (function() {
         });
         
         // Activer l'onglet sélectionné
-        document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
-        document.getElementById(`${tabId}-tab`).classList.add('active');
+        tabButton.classList.add('active');
+        tabPane.classList.add('active');
     }
 
     /**
@@ -336,7 +345,10 @@ const UI = (function() {
         updateDashboard,
         setTheme,
         initEventListeners,
-        printTournament
+        printTournament,
+        exportRanking,  // Ajouter ces deux fonctions
+        printRanking,   // dans l'API publique
+        debugUI         // Ajouter la fonction de débogage
     };
 })();
 
